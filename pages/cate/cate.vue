@@ -1,5 +1,10 @@
 <template>
   <view>
+    <!-- 使用自定义的搜索组件 -->
+    <view class="search-box" @click="gotoSearch">
+     <mySearch ></mySearch>
+    </view>
+
     <view class="scroll-view-container">
       <!-- 左侧的滚动视图区域 -->
       <scroll-view class="left-scroll-view" scroll-y :style="{height: wh + 'px'}">
@@ -31,7 +36,11 @@
 
 
 <script>
+  import mySearch from '@/component/my-search.vue'
   export default {
+    components: {
+    mySearch
+    },
     data() {
       return {
         active: 0,
@@ -49,11 +58,17 @@
       // 获取当前系统的信息
       const sysInfo = uni.getSystemInfoSync()
       // 为 wh 窗口可用高度动态赋值
-      this.wh = sysInfo.windowHeight
+      this.wh = sysInfo.windowHeight - 50
       this.getCateList()
 
     },
     methods: {
+      // 跳转到分包中的搜索页面
+      gotoSearch() {
+        uni.navigateTo({
+          url: '/subpkg/search/search'
+        })
+      },
       // 点击三级分类项跳转到商品列表页面
       gotoGoodsList(item3) {
         uni.navigateTo({
@@ -83,6 +98,15 @@
 </script>
 
 <style lang="scss">
+  .search-box {
+    // 设置定位效果为“吸顶”
+    position: sticky;
+    // 吸顶的“位置”
+    top: 0;
+    // 提高层级，防止被轮播图覆盖
+    z-index: 999;
+  }
+
   .cate-lv2-title {
     font-size: 12px;
     font-weight: bold;
